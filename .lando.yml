@@ -1,0 +1,28 @@
+name: wp-weescribe-plugin
+recipe: wordpress
+config:
+  php: '8.1'
+  webroot: web
+  database: mariadb
+  via: nginx
+  xdebug: true
+
+services:
+  dbadmin:
+    type: phpmyadmin
+    hosts:
+      - database
+  theme:
+    type: node:16
+  mailhog:
+    type: mailhog
+    portforward: true
+    hogfrom:
+      - appserver
+
+tooling:
+  install:wp:
+    cmd:
+      - wp core install --url=wp-weescribe-plugin.lndo.site --title="WeeScribe Plugin" --admin_user=admin --admin_password=password --admin_email=admin@mail.lndo.site
+  yarn:
+    service: theme
